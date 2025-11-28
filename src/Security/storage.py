@@ -2,9 +2,9 @@ import redis
 import logging
 import os
 
-# Instantiate a Redis client, connecting to localhost on port 6379
+# Instantiate a Redis client, connecting to redis host on port 6379
 def establish_redis_connection():
-    redis_host = os.getenv('REDIS_HOST', 'localhost')
+    redis_host = os.getenv("REDIS_HOST", "localhost")
 
     return redis.Redis(
         host=redis_host,
