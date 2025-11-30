@@ -4,13 +4,13 @@ import os
 from typing import Set
 
 # File import
-from settings import VALID_API_KEY
+from src.Security import settings
 
 # Get and validate keys. Simplifies process given all users must have key.
 async def get_and_validate_key(x_api_key: str = Header(...)) -> str:
-    if x_api_key not in VALID_API_KEY:
+    if x_api_key not in settings.VALID_API_KEY:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detaiL="Invalid or missing API Key"
+            detail="Invalid or missing API key"
         )
     return x_api_key

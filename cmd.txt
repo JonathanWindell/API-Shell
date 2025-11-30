@@ -1,0 +1,3 @@
+# Test cmd:
+
+python -m pytest tests/[file name]

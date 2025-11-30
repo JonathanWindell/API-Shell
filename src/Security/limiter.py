@@ -1,4 +1,4 @@
-# Dependencies import
+
 from logging import getLogger
 from fastapi import HTTPException, status, Depends
 
