@@ -29,8 +29,8 @@ def increment_counter(client, key, window_seconds=60):
     except redis.RedisError as e:
         logging.error(f"Redis error {e}")
         return 0
+    
+redis_client = establish_redis_connection()
 
 if __name__ == "__main__":
-    redis_client = establish_redis_connection()
-    increment_counter(redis_client)
-
+    print(increment_counter(redis_client, "ratelimit:test_user"))

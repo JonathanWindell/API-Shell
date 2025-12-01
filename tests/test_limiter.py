@@ -4,52 +4,60 @@ from fastapi import HTTPException
 from unittest.mock import patch
 
 # File import
-from src.Security.limiter import check_rate_limiter, increment_counter
+from src.Security.limiter import check_rate_limiter
 
 # test api key unique ID (Passes)
 def test_unique_keys_are_generated():
-    mock_counter = increment_counter
+    with patch("src.Security.limiter.increment_counter") as mock_counter:
+        mock_counter.return_value = 1
+        check_rate_limiter("user_A")
+        args_A, _ = mock_counter.call_args
+        assert args_A[1] == "ratelimit:user_A"
 
-    result = mock_counter(1)
-    check_rate_limiter("user_A")
-
-    assert mock_counter == "ratelimit:user_A"
-
-    check_rate_limiter("user_B")
-
-    assert mock_counter == "ratelimit:user_B"
-
-    return result
+        check_rate_limiter("user_B")
+        args_B, _ = mock_counter.call_args
+        assert args_B[1] == "ratelimit:user_B"
 
 # test api key unique ID (Fails)
-"""
-create valid_api_key with ID 1
-create valid_api_key with ID 1
+def test_same_keys_are_generated():
+    with patch("src.Security.limiter.increment_counter") as mock_counter:
+        mock_counter.return_value = 1
 
-raise error given that duplicate exist
+        check_rate_limiter("user_A")
+        args_A, _ = mock_counter.call_args
+    
+        check_rate_limiter("user_A")
+        args_B, _ = mock_counter.call_args
 
-assert result detail ID is the same
-"""
+        assert args_A[1] == args_B[1]
 
 # test rate limit (Passes)
-"""
-create number_of_calls = 30
+def test_rate_limit_pass():
+    with patch("src.Security.limiter.increment_counter") as mock_counter:
+        mock_counter.return_value = 30
 
-assert number_of_calls is within accepted limits
+        result = check_rate_limiter("Test_User")
 
-assert result = number_of_calls is ok
-"""
+        assert result is True
 
 # test rate limit (Fails)
-"""
-create number_of_calls = 130
+def test_rate_limit_fail():
+    with patch("src.Security.limiter.increment_counter") as mock_counter:
+        mock_counter.return_value = 101
 
-assert number_of_calls is outside accepted limits
+        with pytest.raises(HTTPException) as exec_info:
+            check_rate_limiter("Test_User")
 
-raise error given that number_of_calls is outside range
+        assert exec_info.value.status_code == 429
+        assert exec_info.value.detail == "Too Many Requests."
 
-assert http 429
-assert detail = "Too Many Requests
-"""
 
 # test fail open (Redis error)
+def test_redis_fail_open():
+    with patch("src.Security.limiter.increment_counter") as mock_counter:
+        mock_counter.return_value = 0
+
+        result = check_rate_limiter("Test_User")
+
+        assert result is True
+
