@@ -1,9 +1,12 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Depends, Query
+from src.Security.limiter import check_rate_limiter
 from src.Classes.person_data import generate_german_person
 
-app = FastAPI(
-    title="German Personal Data Generator",
-    description="Generate realistic German fake personal data for testing (GDPR-safe).",
-    version="0.1.0"
-)
+app = FastAPI()
 
+@app.get("/german-users")
+def get_users(
+    count: int = Query(1, ge=1, le=10, description="Max 10 persons"),
+    limit_check: bool = Depends(check_rate_limiter) 
+):
+    return generate_german_person(count)

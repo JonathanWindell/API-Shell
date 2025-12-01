@@ -11,7 +11,7 @@ _keys_string = os.getenv("API_KEYS", "test_key_1")
 VALID_API_KEY = set(_keys_string.split(","))
 
 # Sets rates. Will be expanded upon for different users.  
-RATE_LIMIT_LIMIT = 100
+RATE_LIMIT_LIMIT = 3
 RATE_LIMIT_WINDOW = 60
 
 
