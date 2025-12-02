@@ -1,0 +1,23 @@
+services:
+  # Tjänst 1: Din App
+  web-app:
+    build: .  # Bygg Dockerfilen som ligger i denna mapp
+    ports:
+      - "8000:8000" # Öppna port 8000 utåt
+    environment:
+      - REDIS_HOST=redis-db # Viktigt! Vi pekar på namnet nedan
+      - API_KEYS=test_key_1,admin_key
+      - RATE_LIMIT_LIMIT=3 # Låg gräns för att testa
+    depends_on:
+      - redis-db # Vänta på att databasen startar
+
+  # Tjänst 2: Databasen
+  redis-db:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data 
+
+volumes:
+  redis_data:

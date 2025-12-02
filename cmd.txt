@@ -1,3 +1,8 @@
 # Test cmd:
-
 python -m pytest tests/[file name]
+
+# Freeze requirements
+pip freeze > requirements.txt
+
+# Docker compose action
+docker-compose up --build
