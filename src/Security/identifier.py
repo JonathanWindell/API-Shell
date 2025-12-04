@@ -4,7 +4,7 @@ import os
 from typing import Set
 
 # File import
-from src.Security import settings
+from src.security import settings
 
 # Get and validate keys. Simplifies process given all users must have key.
 async def get_and_validate_key(x_api_key: str = Header(...)) -> str:

@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from unittest.mock import patch
 
 # File import
-from src.Security.limiter import check_rate_limiter
+from src.security.limiter import check_rate_limiter
 
 # test api key unique ID (Passes)
 def test_unique_keys_are_generated():

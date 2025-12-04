@@ -1,7 +1,7 @@
 import pytest
 from fastapi import HTTPException
-from src.Security.identifier import get_and_validate_key
-from src.Security import settings 
+from src.security.identifier import get_and_validate_key
+from src.security import settings 
 
 # test valid key
 @pytest.mark.asyncio

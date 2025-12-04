@@ -3,9 +3,9 @@ from logging import getLogger
 from fastapi import HTTPException, status, Depends
 
 # File import
-from src.Security.identifier import get_and_validate_key
-from src.Security.storage import increment_counter, redis_client
-from src.Security.settings import RATE_LIMIT_LIMIT, RATE_LIMIT_WINDOW
+from src.security.identifier import get_and_validate_key
+from src.security.storage import increment_counter, redis_client
+from src.security.settings import RATE_LIMIT_LIMIT, RATE_LIMIT_WINDOW
 
 logger = getLogger(__name__)
 

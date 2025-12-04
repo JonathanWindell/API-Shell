@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends, Query
-from src.Security.limiter import check_rate_limiter
-from src.Classes.person_data import generate_german_person
+from src.security.limiter import check_rate_limiter
+from src.classes.person_data import generate_german_person
 
 app = FastAPI()
 
