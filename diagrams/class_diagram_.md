@@ -1,41 +1,63 @@
 ```mermaid
     classDiagram
-        Storage <|-- Limiter
-        Identifier <|-- Limiter
-        Identifier <|-- Settings
-        Main <|-- PersonData
-        Main <|-- Limiter
-        Main <|-- User
-        UserManager <|-- Main
-        Storage <|-- UserManager
+    %% Relationer
+    Main --> Schemas : Used for validation
+    Main --> UserManager
+    Main --> Limiter
+    Main --> PersonData
+    
+    Limiter --> Storage
+    UserManager --> Storage
+    UserManager --> Settings
+    Identifier --> Settings
+    
+    %% Beroenden för data
+    UserManager ..> Schemas : Returns Token/User
+    PersonData ..> Schemas : Returns PersonResponse
 
-        class Limiter{
-            +check_rate_limiter(user_token)
-        }
-        class Identifier{
-            +get_and_validate_key(user_token)
-        }
-        class Settings{
-            +String VALID_USER_TOKEN
-            +String JWT_SECRET
-        }
-        class Storage{
-            +establish_redis_connection()
-            +increment_counter(client, token, window_seconds=())
-        }
-        class PersonData{
-            +generate_german_person()
-        }
+    namespace Core_Logic {
         class Main{
-            
-        }
-        class User{
-            +String username
-            +String password
+            +login(form_data)
+            +get_users(token)
         }
         class UserManager{
-            +validate_user_password()
-            +create_access_token()
+            +verify_password(plain, hashed)
+            +create_access_token(data)
+            +get_user(username)
         }
+        class Limiter{
+            +check_rate_limiter()
+        }
+        class Identifier{
+            +get_and_validate_key()
+        }
+    }
+
+    namespace Data_Layer {
+        class Schemas{
+            <<Pydantic Models>>
+            +UserCreate
+            +UserResponse
+            +Token
+            +PersonResponse
+        }
+        class User{
+            <<DB Model>>
+            +username
+            +hashed_password
+        }
+        class Storage{
+            +redis_client
+            +get()
+            +set()
+        }
+    }
+
+    namespace Config {
+        class Settings{
+            +SECRET_KEY
+            +REDIS_HOST
+        }
+    }
 
 ```
