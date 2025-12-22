@@ -9,7 +9,7 @@
 
 # Highlights
 
-This project was created as an easier way to create API:s. The base of the API often consists of the same modules which led med to create this project!
+This project was created as an easier way to create API:s. The base of the API often consists of the same modules which led me to create this project!
 
 - **Rate Limiting:** Protects endpoints using Redis to prevent abuse (Sliding Window algorithm).
 - **Secure Auth:** Full JWT implementation with Bcrypt password hashing.
