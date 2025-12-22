@@ -32,7 +32,7 @@ I'm Jonathan and I develop projects in my sparetime that help myself and others 
 
 Since this is an API Shell, it comes with a fully functional Authentication flow and Rate Limiting enabled by default.
 
-# Installation instructions
+# Installation Instructions
 
 ### Prerequisites
 - Docker Desktop (Recommended)
