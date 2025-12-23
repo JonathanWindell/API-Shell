@@ -38,7 +38,7 @@ Since this is an API Shell, it comes with a fully functional Authentication flow
 - Docker Desktop (Recommended)
 - Python 3.12 and local Redis instance (Local Development)
 
-**Tips:** Always easier creating a virtual enviroment to contain downloaded dependencies needed for this project. [W3School Venv](https://www.w3schools.com/python/python_virtualenv.asp)
+**Tips:** Always easier creating a virtual enviroment to contain downloaded dependencies needed for this project if you will develop locally. [W3School Venv](https://www.w3schools.com/python/python_virtualenv.asp)
 
 ### Docker Compose (Fastest)
 ```bash
@@ -73,10 +73,10 @@ uvicorn main:app --reload
 Contributions are welcome! Since this project follows **TDD (Test Driven Development)**, please ensure you include tests for any new features.
 
 1. **Fork** the project.
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
+2. Create your Feature Branch (`git checkout -b feature/UserFeature`).
+3. Commit your changes (`git commit -m 'Add some Feature'`).
 4. **Run Tests** (`pytest`). Ensure everything is green! 
-5. Push to the Branch (`git push origin feature/AmazingFeature`).
+5. Push to the Branch (`git push origin feature/UserFeature`).
 6. Open a **Pull Request**.
 
 # License
