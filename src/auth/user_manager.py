@@ -32,3 +32,13 @@ class user_manager:
         encoded_jwt = jwt.encode(to_encode, self.SECRET_KEY, algorithm=self.ALGORITHM)
 
         return encoded_jwt
+    
+
+"""
+METOD verify_password(self, plain_password, hashed_password):
+        
+        # Använd ditt verktyg (pwd_context)
+        # Funktionen heter ofta .verify(klart_lösenord, hash) i biblioteket
+        
+        RETURNERA resultatet (som blir True eller False)
+"""
