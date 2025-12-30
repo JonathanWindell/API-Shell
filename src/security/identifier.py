@@ -1,13 +1,22 @@
-# Dependencies import
 from fastapi import Header, HTTPException, status
 import os
 from typing import Set
 
-# File import
 from src.security import settings
 
-# Get and validate keys. Simplifies process given all users must have key.
 async def get_and_validate_key(x_api_key: str = Header(...)) -> str:
+    """
+    Validates the API key provided in the request header.
+
+    Args:
+        x_api_key (str): The API key extracted from the 'x-api-key' header.
+
+    Returns:
+        str: The validated API key.
+
+    Raises:
+        HTTPException: If the API key is missing or invalid (401).
+    """
     if x_api_key not in settings.VALID_API_KEY:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

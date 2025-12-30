@@ -1,11 +1,17 @@
-# Dependencies import
 import redis
 import logging
 import os
 
-# Instantiate a Redis client, connecting to redis host on port 6379. 
-def establish_redis_connection():
-    redis_host = os.getenv("REDIS_HOST", "localhost")
+from redis import Redis
+
+def establish_redis_connection() -> Redis:
+    """
+    Establish a connection to Redis.
+
+    Returns:
+        redis.Redis: The Redis client.
+    """
+    redis_host = os.getenv("REDIS_HOST", "localhost") 
 
     return redis.Redis(
         host=redis_host,
@@ -14,16 +20,33 @@ def establish_redis_connection():
         decode_responses=True
     )
 
-# Creates a counter that keeps track of client usage. 
-def increment_counter(client, key, window_seconds=60):
+def increment_counter(client: Redis, key: str, window_seconds: int = 60) -> int:
+    """
+    Increment the counter for the given key within the specified window.
+
+    Args:
+        client (redis.Redis): The Redis client.
+        key (str): The key to increment.
+        window_seconds (int, optional): The window size in seconds. Defaults to 60.
+
+    Returns:
+        int: The current count for the key.
+
+    Raises:
+        redis.RedisError: If there is a Redis error.
+    """
     try:
         pipeline = client.pipeline()
 
         pipeline.incr(key)
-        pipeline.expire(key, window_seconds) # Fix this. Sliding window effect. 
-
+        pipeline.ttl(key) 
+        
         result = pipeline.execute()
         current_count = result[0]
+        current_ttl = result[1]
+
+        if current_ttl == -1:
+            client.expire(key, window_seconds)
 
         return current_count
     except redis.RedisError as e:

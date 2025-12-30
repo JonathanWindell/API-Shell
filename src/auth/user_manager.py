@@ -2,30 +2,55 @@ from passlib.context import CryptContext
 from datetime import datetime, timedelta
 import jwt
 
-# Create hashed password using bcrypt
-class user_manager:
-    # Constants for user token
+class UserManager:
+    """
+    Handles user security operations including password hashing 
+    and JWT token generation.
+    """
+    
+    # TODO: In production, fetch these from environment variables (.env) to be secure!
     SECRET_KEY = "SECRET_KEY"
     ALGORITHM = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-    # Create hashing rules for password 
     def __init__(self):
         self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
     
-    # Get the password hash
-    def get_password_hash(self, password):
+    def get_password_hash(self, password: str) -> str:
+        """
+        Takes a plain text password and returns a hashed string using Bcrypt.
+        """
         hashed_password = self.pwd_context.hash(password)
 
         return hashed_password
+    
+    def verify_password(self, plain_password: str, hashed_password: str) -> bool:
+        """
+        Verifies a plain text password against the stored hash.
+        Returns True if they match, False otherwise.
+        """
+        result = self.pwd_context.verify(plain_password, hashed_password)
 
-    def create_access_token(self, data: dict, expires_delta: timedelta = None):
+        return result
+
+    def create_access_token(self, data: dict, expires_delta: timedelta = None) -> str:
+        """
+        Generates a JWT token containing user data.
+        
+        Args:
+            data (dict): The payload to encode (e.g., {"sub": "username"}).
+            expires_delta (timedelta, optional): Custom expiration time. 
+                                                 Defaults to ACCESS_TOKEN_EXPIRE_MINUTES.
+        
+        Returns:
+            str: The encoded JWT token as a string.
+        """
         to_encode = data.copy()
 
         if expires_delta:
             expire = datetime.now() + expires_delta
         else:
-            expire = datetime.now() + timedelta(self.ACCESS_TOKEN_EXPIRE_MINUTES)
+            expire = datetime.now() + timedelta(minutes = self.ACCESS_TOKEN_EXPIRE_MINUTES)
 
         to_encode.update({"exp": expire})
 
@@ -34,11 +59,3 @@ class user_manager:
         return encoded_jwt
     
 
-"""
-METOD verify_password(self, plain_password, hashed_password):
-        
-        # Använd ditt verktyg (pwd_context)
-        # Funktionen heter ofta .verify(klart_lösenord, hash) i biblioteket
-        
-        RETURNERA resultatet (som blir True eller False)
-"""

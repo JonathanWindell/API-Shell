@@ -1,48 +1,55 @@
 import pytest
 import jwt
 
-from src.auth.user_manager import user_manager
+from src.auth.user_manager import UserManager
 
-# Test user password is hashed correctly
 def test_user_password_hash():
-    pwd_context = user_manager()
+    """
+    Verifies that the password is correctly hashed and formatted (Bcrypt).
+    """
+    # Arrange
+    manager = UserManager()
     secret_password = "secret123"
 
-    hashed_password = pwd_context.get_password_hash(secret_password)
+    # Act
+    hashed_password = manager.get_password_hash(secret_password)
 
+    # Assert
     assert secret_password != hashed_password
     assert hashed_password.startswith("$2b$")
 
-    
-# Test create user access token
 def test_create_access_token():
-    manager = user_manager()
+    """
+    Verifies that the token is created, is a string, and contains the correct payload.
+    """
+    # Arrange
+    manager = UserManager()
     username = "testuser"
 
+    # Act
     jwt_token = manager.create_access_token(data={"sub": username})
 
+    # Assert
     assert isinstance(jwt_token, str)
     assert len(jwt_token) > 0
     
-    payload = jwt.decode(jwt_token, "SECRET_KEY", algorithms=["HS256"])
+    # Check payload
+    payload = jwt.decode(jwt_token, manager.SECRET_KEY, algorithms=[manager.ALGORITHM])
     assert payload["sub"] == "testuser"
 
-"""
-TEST: Verify Password Logic
+def test_verify_user_password():
+    """
+    Verifies that the password verification logic works for both correct and incorrect passwords.
+    """
+    # Arrange
+    manager = UserManager()
+    password = "Secret123"
 
-1. FÖRBERED (Arrange)
-   Initiera UserManager
-   Sätt ett lösenord = "hemligt123"
-   
-   Skapa en hash av lösenordet (använd din get_password_hash funktion)
-   Spara i variabeln 'hashed_pw'
+    # Act
+    hashed_password = manager.get_password_hash(password)
 
-2. TESTA RÄTT LÖSENORD (Assert)
-   Anropa verify_password("hemligt123", hashed_pw)
-   Kolla att resultatet är SANT (True)
+    # Assert
+    assert manager.verify_password("Secret123", hashed_password) == True
+    assert manager.verify_password("NotSecret123", hashed_password) == False
 
-3. TESTA FEL LÖSENORD (Assert)
-   Anropa verify_password("fel123", hashed_pw)
-   Kolla att resultatet är FALSKT (False)
-"""
 
