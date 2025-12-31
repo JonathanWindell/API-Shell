@@ -8,3 +8,13 @@ pip freeze > requirements.txt
 docker-compose up --build
 docker-compose up -d redis-db
 docker-compose down
+
+# Start fastapi
+vicorn main:app --reload
+
+# Endpoint Swagger 
+http://127.0.0.1:8000/docs
+
+# Login 
+Username: Admin
+Password: Secret

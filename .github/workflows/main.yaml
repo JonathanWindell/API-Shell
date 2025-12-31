@@ -1,0 +1,126 @@
+name: Workflow push
+
+# Körs vid push till main eller vid Pull Requests
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # --- JOBB 1: TESTER (Körs 5 gånger parallellt) ---
+  tests:
+    name: Test Python ${{ matrix.version }}
+    runs-on: ubuntu-latest
+    
+    # Här snurrar vi upp Redis i en docker-container inuti GitHub Actions
+    services:
+      redis:
+        image: redis:alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    strategy:
+      matrix:
+        version: ["3.9", "3.10", "3.11", "3.12"] 
+        # Tog bort 3.13 tillfälligt då det ibland saknas biblioteksstöd, lägg till sen om du vill!
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5 # Uppdaterad till v5
+        with:
+          python-version: ${{ matrix.version }}
+
+      - name: Install dependencies
+        # Vi uppgraderar pip och installerar dina krav + testverktyg
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-mock
+
+      - name: Run Tests
+        # Vi behöver inte starta uvicorn, vi kör bara testerna
+        # Vi sätter environment variables direkt här för testerna
+        env:
+          REDIS_HOST: localhost
+          API_KEYS: test_key_1
+          RATE_LIMIT_LIMIT: 5
+          RATE_LIMIT_WINDOW: 60
+        run: pytest
+
+  # --- JOBB 2: KVALITET (Körs 1 gång) ---
+  quality:
+    name: Code Quality Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4 # Måste vara samma Action som ovan
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12" # Räcker att köra quality på en version
+
+      # Svar på ditt "How?": Vi installerar verktygen via pip!
+      - name: Install Quality Tools
+        run: |
+          pip install ruff safety
+
+      - name: Linting with Ruff
+        # Ruff kollar kodstil och buggar. Om den hittar fel stoppas pipelinen.
+        run: ruff check .
+
+      - name: Format Check with Ruff
+        # Kollar om koden är snyggt formatterad (motsvarar Black)
+        run: ruff format --check .
+
+      - name: Security Check with Safety
+        # Kollar om dina dependencies i requirements.txt har kända säkerhetshål
+        run: safety check -r requirements.txt
+
+
+
+
+strategy:
+      matrix:
+        python-version: [3.12]
+        redis-version: [6, 7]
+
+  job-5_check-pytest-coverage:
+    runs-on: ubuntu-latest
+    steps: 
+    - uses: #What?
+    - name: Set up Python
+      uses: #What?
+      with:
+        python-version: '3.12'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Test with pytest
+      run: |
+        pip install pytest pytest-cov
+        pytest --cov tests/
+
+
+
+# Running matrix to test for different python versions
+
+# Check and start service containers and then turn it off again when passed
+
+# Limiting and formating for correct commenting and code formatting
+
+# Safety check all dependencies
+
+# When push to main branch run all tests. 
+# Print out test coverage
