@@ -6,3 +6,5 @@ pip freeze > requirements.txt
 
 # Docker compose action
 docker-compose up --build
+docker-compose up -d redis-db
+docker-compose down

@@ -17,7 +17,7 @@ async def get_and_validate_key(x_api_key: str = Header(...)) -> str:
     Raises:
         HTTPException: If the API key is missing or invalid (401).
     """
-    if x_api_key not in settings.VALID_API_KEY:
+    if x_api_key not in settings.VALID_API_KEYS:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid or missing API key"
