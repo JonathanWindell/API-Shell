@@ -1,37 +1,44 @@
 ```Mermaid
     sequenceDiagram
     participant User
-    participant Main
-    participant Identifier
-    participant Limiter
-    participant Storage
+    participant Main as Main (FastAPI)
+    participant Auth as Auth (JWT)
+    participant Sec as Limiter & Identifier
     participant Redis
-    participant PersonData
 
-    User->>Main: Request Data (Header)
-    Main->>Identifier: Validate Key
+    Note over User, Main: User calls a protected endpoint
+
+    User->>Main: GET /protected (Header: Token + x-api-key)
+    
+    %% Step 1: JWT Validation (Automatic via Depends)
+    Main->>Auth: Validate Token (Bearer)
+    
+    alt Invalid Token
+        Auth-->>Main: Exception
+        Main-->>User: 401 Unauthorized
+    else Token OK
+        Auth-->>Main: User: "admin"
+    end
+
+    %% Step 2: Rate Limiting & API Key (Inside check_rate_limiter)
+    Main->>Sec: check_rate_limiter()
+    Sec->>Sec: Validate x-api-key (Identifier)
     
     alt Invalid Key
-        Identifier-->>Main: Error (401 Unauthorized)
-        Main-->>User: Response 401
-    else Valid Key
-        Identifier-->>Main: Key OK (Return Key)
+        Sec-->>Main: Exception
+        Main-->>User: 401 Unauthorized
+    else Key OK
+        Sec->>Redis: Increment Count
+        Redis-->>Sec: New Count (e.g. 2)
         
-        Main->>Limiter: Check Rate Limit (Key)
-        Limiter->>Storage: Increment Counter
-        Storage->>Redis: INCR + EXPIRE
-        Redis-->>Storage: New Count (t.ex. 5)
-        Storage-->>Limiter: 5
-        
-        alt Over Limit ( > 100)
-            Limiter-->>Main: Error (429 Too Many Requests)
-            Main-->>User: Response 429
+        alt Over Limit (> Limit)
+            Sec-->>Main: Exception
+            Main-->>User: 429 Too Many Requests
         else Under Limit
-            Limiter-->>Main: OK (Allow)
+            Sec-->>Main: Return True (Allowed)
             
-            Main->>PersonData: Generate Data
-            PersonData-->>Main: JSON Object
-            Main-->>User: Response 200 OK (JSON)
+            %% Step 3: Success
+            Main-->>User: Response 200 OK (UserResponse JSON)
         end
     end
 ```

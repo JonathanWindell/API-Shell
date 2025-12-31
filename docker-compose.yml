@@ -1,17 +1,18 @@
 services:
-  # Tjänst 1: Din App
+  # Service 1: Uvicorn main app
   web-app:
-    build: .  # Bygg Dockerfilen som ligger i denna mapp
+    build: .
     ports:
-      - "8000:8000" # Öppna port 8000 utåt
-    environment:
-      - REDIS_HOST=redis-db # Viktigt! Vi pekar på namnet nedan
-      - API_KEYS=test_key_1,admin_key
-      - RATE_LIMIT_LIMIT=3 # Låg gräns för att testa
+      - "8000:8000"
+    # Load .env file
+    env_file:
+      - src/security/.env # Replace with the path to your .env file
+    environment: 
+      - REDIS_HOST=redis-db 
     depends_on:
-      - redis-db # Vänta på att databasen startar
+      - redis-db
 
-  # Tjänst 2: Databasen
+  # Service 2: Database
   redis-db:
     image: redis:alpine
     ports:

@@ -29,7 +29,7 @@ async def login_for_access_token(
     """
     Login endpoint. authenticates user and returns a JWT token.
     """
-    # Mockad användardatabas för detta shell
+    # Mock userbase
     fake_db_user = "admin"
     fake_db_hash = user_manager.get_password_hash("secret") 
 
