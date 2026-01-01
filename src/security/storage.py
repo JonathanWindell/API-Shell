@@ -4,6 +4,7 @@ import os
 
 from redis import Redis
 
+
 def establish_redis_connection() -> Redis:
     """
     Establish a connection to Redis.
@@ -11,14 +12,10 @@ def establish_redis_connection() -> Redis:
     Returns:
         redis.Redis: The Redis client.
     """
-    redis_host = os.getenv("REDIS_HOST", "localhost") 
+    redis_host = os.getenv("REDIS_HOST", "localhost")
 
-    return redis.Redis(
-        host=redis_host,
-        port=6379,
-        db=0,
-        decode_responses=True
-    )
+    return redis.Redis(host=redis_host, port=6379, db=0, decode_responses=True)
+
 
 def increment_counter(client: Redis, key: str, window_seconds: int = 60) -> int:
     """
@@ -39,8 +36,8 @@ def increment_counter(client: Redis, key: str, window_seconds: int = 60) -> int:
         pipeline = client.pipeline()
 
         pipeline.incr(key)
-        pipeline.ttl(key) 
-        
+        pipeline.ttl(key)
+
         result = pipeline.execute()
         current_count = result[0]
         current_ttl = result[1]
@@ -52,7 +49,8 @@ def increment_counter(client: Redis, key: str, window_seconds: int = 60) -> int:
     except redis.RedisError as e:
         logging.error(f"Redis error {e}")
         return 0
-    
+
+
 redis_client = establish_redis_connection()
 
 if __name__ == "__main__":

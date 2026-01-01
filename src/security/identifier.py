@@ -2,6 +2,7 @@ from fastapi import Header, HTTPException, status
 
 from src.security import settings
 
+
 async def get_and_validate_key(x_api_key: str = Header(...)) -> str:
     """
     Validates the API key provided in the request header.
@@ -18,6 +19,6 @@ async def get_and_validate_key(x_api_key: str = Header(...)) -> str:
     if x_api_key not in settings.VALID_API_KEYS:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid or missing API key"
+            detail="Invalid or missing API key",
         )
     return x_api_key
