@@ -1,4 +1,3 @@
-import pytest
 import jwt
 
 from src.auth.user_manager import UserManager
@@ -49,7 +48,7 @@ def test_verify_user_password():
     hashed_password = manager.get_password_hash(password)
 
     # Assert
-    assert manager.verify_password("Secret123", hashed_password) == True
-    assert manager.verify_password("NotSecret123", hashed_password) == False
+    assert manager.verify_password("Secret123", hashed_password) 
+    assert not manager.verify_password("NotSecret123", hashed_password) 
 
 

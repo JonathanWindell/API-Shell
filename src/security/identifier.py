@@ -1,6 +1,4 @@
 from fastapi import Header, HTTPException, status
-import os
-from typing import Set
 
 from src.security import settings
 

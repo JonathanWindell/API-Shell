@@ -10,7 +10,7 @@ async def test_valid_api_key():
     Verifies that valid API keys are correctly validated.
     """
     # Arrange
-    settings.VALID_API_KEY = {"Test_Api_Key"}
+    settings.VALID_API_KEYS = {"Test_Api_Key"}
 
     # Act
     result = await get_and_validate_key("Test_Api_Key")
@@ -25,7 +25,7 @@ async def test_invalid_api_key():
     Verifies that invalid API keys raise an HTTPException.
     """
     # Arrange
-    settings.VALID_API_KEY = {"Test_Api_Key"}
+    settings.VALID_API_KEYS = {"Test_Api_Key"}
 
     # Act
     with pytest.raises(HTTPException) as exec_info:

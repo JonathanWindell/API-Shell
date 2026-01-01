@@ -1,20 +1,41 @@
-# Test cmd:
-python -m pytest tests/[file name]
+# --- DOCKER OPERATIONS ---
+# Start the application in the background (rebuilds if necessary)
+up:
+	docker-compose up -d --build
 
-# Freeze requirements
-pip freeze > requirements.txt
+# Stop and remove all containers
+down:
+	docker-compose down
 
-# Docker compose action
-docker-compose up --build
-docker-compose up -d redis-db
-docker-compose down
+# Start only the Redis container (useful for local development)
+redis:
+	docker-compose up -d redis-db
 
-# Start fastapi
-vicorn main:app --reload
+# --- LOCAL DEVELOPMENT ---
+# Start the FastAPI server locally (with hot reload)
+run:
+	uvicorn main:app --reload
 
-# Endpoint Swagger 
-http://127.0.0.1:8000/docs
+# Install dependencies from requirements.txt
+install:
+	pip install -r requirements.txt
 
-# Login 
-Username: Admin
-Password: Secret
+# Save current dependencies to requirements.txt
+freeze:
+	pip freeze > requirements.txt
+
+# --- TEST & QUALITY ---
+# Run all tests
+test:
+	python -m pytest
+
+# Run tests with verbose output (shows more details)
+test-v:
+	python -m pytest -v
+
+# --- INFO ---
+# Display project information and quick links
+info:
+	@echo "API Shell is running!"
+	@echo "Docs: http://127.0.0.1:8000/docs"
+	@echo "Login: admin / secret"
