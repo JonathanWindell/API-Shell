@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         version: ["3.10", "3.11", "3.12"] 
-        # Tog bort 3.13 tillfälligt då det ibland saknas biblioteksstöd, lägg till sen om du vill!
+        
 
     steps:
       - name: Check out code
