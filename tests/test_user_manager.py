@@ -42,7 +42,7 @@ def test_create_access_token():
 
 def test_create_custom_expiration_access_token():
     """
-    Verifies error path for token that is expired
+    Verifies error path for token that is expired.
     """
     # Arrange
     manager = UserManager()
