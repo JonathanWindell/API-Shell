@@ -53,5 +53,5 @@ def increment_counter(client: Redis, key: str, window_seconds: int = 60) -> int:
 
 redis_client = establish_redis_connection()
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     print(increment_counter(redis_client, "ratelimit:test_user"))
