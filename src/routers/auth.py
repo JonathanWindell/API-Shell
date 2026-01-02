@@ -8,6 +8,7 @@ from src.auth.user_manager import UserManager
 # Create FastAPI router
 router = APIRouter()
 
+
 # Dependency Injection
 def get_user_manager():
     return UserManager()

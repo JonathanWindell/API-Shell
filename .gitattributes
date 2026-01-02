@@ -1,0 +1,2 @@
+# Force txt files to use LF (Linux formatting)
+* text=auto eol=lf

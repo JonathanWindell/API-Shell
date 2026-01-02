@@ -8,12 +8,15 @@ from src.security.limiter import check_rate_limiter
 # Create FastAPI router
 router = APIRouter()
 
+
 # Dependency Injection
 def get_user_manager():
     return UserManager()
 
+
 # Create OAuth2 scheme
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
 
 # Create routes
 @router.get("/protected")
