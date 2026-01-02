@@ -1,6 +1,3 @@
-from src.routers import auth, general
-
-
 def test_read_protected_route_success(client, valid_token):
     """
     Checks if /protected answers 200 of token is valid.
@@ -24,9 +21,6 @@ def test_read_protected_route_no_token(client):
     """
     Validates that user without valid token is thrown out.
     """
-
-    # Arrange
-    auth_header = {"Authorization"}
 
     # Act
     response = client.get("/protected")
