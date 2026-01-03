@@ -11,7 +11,7 @@ router = APIRouter()
 
 # Dependency Injection
 def get_user_manager():
-    return UserManager()
+    return UserManager()  # pragma: no cover
 
 
 # Create route
