@@ -1,5 +1,6 @@
 import jwt
 from datetime import timedelta
+from src.config import settings
 
 from src.auth.user_manager import UserManager
 
@@ -36,7 +37,9 @@ def test_create_access_token():
     assert len(jwt_token) > 0
 
     # Check payload
-    payload = jwt.decode(jwt_token, manager.SECRET_KEY, algorithms=[manager.ALGORITHM])
+    payload = jwt.decode(
+        jwt_token, settings.secret_key, algorithms=[settings.algorithm]
+    )
     assert payload["sub"] == "testuser"
 
 
@@ -55,7 +58,9 @@ def test_create_custom_expiration_access_token():
     )
 
     # Assert
-    payload = jwt.decode(jwt_token, manager.SECRET_KEY, algorithms=[manager.ALGORITHM])
+    payload = jwt.decode(
+        jwt_token, settings.secret_key, algorithms=[settings.algorithm]
+    )
     assert payload["sub"] == "testuser"
 
 

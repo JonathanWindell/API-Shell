@@ -36,8 +36,8 @@ def test_router_auth_return(client):
 
     # Arrange
     test_dict = {
-        "username": "admin",
-        "password": "secret",
+        "username": "admin_user",
+        "password": "secret_password",
     }
 
     # Act
@@ -69,7 +69,7 @@ def test_login_failure(client):
 
     # Arrange
     test_dict = {
-        "username": "admin",
+        "username": "admin_user",
         "password": "wrong_secret",
     }
 

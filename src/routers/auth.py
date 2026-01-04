@@ -2,6 +2,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter
 from typing import Annotated
+import os
 
 from src.auth.user_manager import UserManager
 
@@ -24,8 +25,10 @@ async def login_for_access_token(
     Login endpoint. authenticates user and returns a JWT token.
     """
     # Mock userbase
-    fake_db_user = "admin"
-    fake_db_hash = user_manager.get_password_hash("secret")
+    fake_db_user = os.getenv("DB_USER")
+    fake_db_hash_password = os.getenv("DB_HASH_PASSWORD")
+
+    fake_db_hash = user_manager.get_password_hash(fake_db_hash_password)
 
     if form_data.username != fake_db_user or not user_manager.verify_password(
         form_data.password, fake_db_hash

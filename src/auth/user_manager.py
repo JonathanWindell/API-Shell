@@ -1,5 +1,6 @@
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
+from src.config import settings
 import jwt
 
 
@@ -8,11 +9,6 @@ class UserManager:
     Handles user security operations including password hashing
     and JWT token generation.
     """
-
-    # TODO: In production, fetch these from environment variables (.env) to be secure!
-    SECRET_KEY = "SECRET_KEY"
-    ALGORITHM = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
     def __init__(self):
         self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -52,11 +48,13 @@ class UserManager:
             expire = datetime.now() + expires_delta
         else:
             expire = datetime.now() + timedelta(
-                minutes=self.ACCESS_TOKEN_EXPIRE_MINUTES
+                minutes=settings.access_token_expire_minutes
             )
 
         to_encode.update({"exp": expire})
 
-        encoded_jwt = jwt.encode(to_encode, self.SECRET_KEY, algorithm=self.ALGORITHM)
+        encoded_jwt = jwt.encode(
+            to_encode, settings.secret_key, algorithm=settings.algorithm
+        )
 
         return encoded_jwt
