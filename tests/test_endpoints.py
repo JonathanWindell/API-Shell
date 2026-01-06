@@ -93,4 +93,4 @@ def test_user_router_return(client):
     response = client.get("/users")
 
     # Assert
-    assert response.json()[return_message]
+    assert response.json() == return_message
