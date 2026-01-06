@@ -79,3 +79,18 @@ def test_login_failure(client):
     # Assert
     assert response.status_code == 401
     assert response.json()["detail"] == "Incorrect username or password"
+
+
+def test_user_router_return(client):
+    """
+    Docstring for test_user_router_return
+    """
+
+    # Arrange
+    return_message = {"message": "Database connection works!"}
+
+    # Act
+    response = client.get("/users")
+
+    # Assert
+    assert response.json()[return_message]
