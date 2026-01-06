@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     database_name: str = "postgres"
     database_username: str = "postgres"
 
+    db_user: str = "admin_user"
+    db_hash_password: str = "secret_password"
+
     # Configuration
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf-8", extra="ignore"

@@ -2,8 +2,8 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter
 from typing import Annotated
-import os
 
+from src.config import settings
 from src.auth.user_manager import UserManager
 
 # Create FastAPI router
@@ -25,8 +25,8 @@ async def login_for_access_token(
     Login endpoint. authenticates user and returns a JWT token.
     """
     # Mock userbase
-    fake_db_user = os.getenv("DB_USER")
-    fake_db_hash_password = os.getenv("DB_HASH_PASSWORD")
+    fake_db_user = settings.db_user
+    fake_db_hash_password = settings.db_hash_password
 
     fake_db_hash = user_manager.get_password_hash(fake_db_hash_password)
 
