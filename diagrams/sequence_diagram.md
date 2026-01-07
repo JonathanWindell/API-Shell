@@ -1,44 +1,50 @@
 ```Mermaid
     sequenceDiagram
     participant User
-    participant Main as Main (FastAPI)
-    participant Auth as Auth (JWT)
-    participant Sec as Limiter & Identifier
-    participant Redis
+    participant Router as GeneralRouter
+    participant Auth as UserManager
+    participant Limiter as Limiter (Security)
+    participant Redis as Redis Cache
 
-    Note over User, Main: User calls a protected endpoint
+    Note over User, Router: User calls a protected endpoint
 
-    User->>Main: GET /protected (Header: Token + x-api-key)
+    User->>Router: GET /protected (Headers: Bearer Token + x-api-key)
     
-    %% Step 1: JWT Validation (Automatic via Depends)
-    Main->>Auth: Validate Token (Bearer)
+    %% Step 1: Authentication (Dependency Injection)
+    rect rgb(240, 248, 255)
+    Note over Router, Auth: Dependency: get_user_manager
+    Router->>Auth: verify_token(Bearer Token)
     
     alt Invalid Token
-        Auth-->>Main: Exception
-        Main-->>User: 401 Unauthorized
-    else Token OK
-        Auth-->>Main: User: "admin"
+        Auth-->>Router: Raise HTTP 401
+        Router-->>User: 401 Unauthorized
+    else Token Valid
+        Auth-->>Router: Returns User Object
+    end
     end
 
-    %% Step 2: Rate Limiting & API Key (Inside check_rate_limiter)
-    Main->>Sec: check_rate_limiter()
-    Sec->>Sec: Validate x-api-key (Identifier)
+    %% Step 2: Rate Limiting & API Key (Dependency Injection)
+    rect rgb(255, 245, 238)
+    Note over Router, Redis: Dependency: check_rate_limiter
+    Router->>Limiter: check_rate_limiter()
+    Limiter->>Limiter: Validate x-api-key (via Identifier)
     
-    alt Invalid Key
-        Sec-->>Main: Exception
-        Main-->>User: 401 Unauthorized
-    else Key OK
-        Sec->>Redis: Increment Count
-        Redis-->>Sec: New Count (e.g. 2)
+    alt Invalid API Key
+        Limiter-->>Router: Raise HTTP 401
+        Router-->>User: 401 Unauthorized
+    else Key Valid
+        Limiter->>Redis: Increment & Get Count
+        Redis-->>Limiter: Current Count (e.g., 3)
         
         alt Over Limit (> Limit)
-            Sec-->>Main: Exception
-            Main-->>User: 429 Too Many Requests
+            Limiter-->>Router: Raise HTTP 429
+            Router-->>User: 429 Too Many Requests
         else Under Limit
-            Sec-->>Main: Return True (Allowed)
-            
-            %% Step 3: Success
-            Main-->>User: Response 200 OK (UserResponse JSON)
+            Limiter-->>Router: Returns True
         end
     end
+    end
+
+    %% Step 3: Success Response
+    Router-->>User: Response 200 OK (JSON)
 ```
