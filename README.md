@@ -78,21 +78,16 @@ def secure_data(
 
 ### 3. Useful Documentation & Resources
 ### SQLAlchemy
-This API Shell uses SQLAlchemy to create tables for database so I thought it fitting to include resources that I used and can recommend. 
+This API Shell leverages **SQLAlchemy** for robust database interactions and ORM (Object-Relational Mapping). It allows you to work with database records seamlessly using Python objects. If you are new to SQLAlchemy or want to deepen your understanding of the implementation, I highly recommend these resources:
 
-[Official SQLAlchemy website: Click here!](https://www.sqlalchemy.org/)
-
-[Arjancodes - SQLAlchemy: Click here!](https://www.youtube.com/watch?v=aAy-B6KPld8)
+- [Official SQLAlchemy Documentation](https://www.sqlalchemy.org/)
+- [ArjanCodes - SQLAlchemy Guide](https://www.youtube.com/watch?v=aAy-B6KPld8)
 
 ### Pydantic
+**Pydantic** is used throughout the project to enforce strict data validation and schema definitions for all API endpoints. This ensures that incoming and outgoing data is always consistent and type-safe. To learn more about its powerful features, check out:
 
-This API Shell uses Pydantic to validate data from API endpoints.
-
-[Official Pydantic website: Click here!](https://docs.pydantic.dev/latest/)
-
-[Pixegami - Pydantic Tutorial: Click here!](https://www.youtube.com/watch?v=XIdQ6gO3Anc)
-
-
+- [Official Pydantic Documentation](https://docs.pydantic.dev/latest/)
+- [Pixegami - Pydantic Tutorial](https://www.youtube.com/watch?v=XIdQ6gO3Anc)
 
 # Installation Instructions
 
