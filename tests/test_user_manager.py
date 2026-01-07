@@ -1,7 +1,7 @@
 import jwt
 from datetime import timedelta
-from src.config import settings
 
+from src.core.config import settings
 from src.auth.user_manager import UserManager
 
 

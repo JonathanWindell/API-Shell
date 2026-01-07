@@ -29,14 +29,70 @@ I'm Jonathan and I develop projects in my sparetime that help myself and others 
 - [Linkedin](https://www.linkedin.com/in/jonathan-windell-418a55232/)
 - [Portfolio](https://portfolio.jonathans-labb.org/)
 
+# Project Structure
+
+```text
+├── .github/
+│   └── workflows/      # CI/CD Pipelines (GitHub Actions)
+├── src/
+│   ├── auth/           # Authentication logic & User Manager
+│   ├── core/           # Core infrastructure (Config, Database, Exceptions)
+│   ├── models/         # Pydantic Schemas & Data Models
+│   ├── routers/        # API Routes/Endpoints
+│   ├── security/       # Security logic (Rate limiting, Identifier)
+│   └── dependencies.py # Dependency Injection helpers
+├── tests/              # Test suite (Pytest)
+├── .env                # Environment variables (Configuration)
+├── docker-compose.yml  # Docker services setup
+├── Dockerfile          # Container definition
+├── main.py             # Application entry point
+└── requirements.txt    # Python dependencies
+```
 
 # Usage Instructions
 
 Since this is an API Shell, it comes with a fully functional Authentication flow and Rate Limiting enabled by default.
 
-SQLAlchemy 
+### 1. Accessing the API Documentation
+Once the server is running, navigate to:
+- Swagger UI: `http://localhost:8000/docs`
+- ReDoc: `http://localhost:8000/redoc`
 
-[Good video by Arjancodes](https://www.youtube.com/watch?v=aAy-B6KPld8)
+
+### 2. How to add a new Protected Route
+This shell comes with a built-in `user_manager` and dependency injection system. Here is how you create a new secure endpoint:
+
+```python
+from fastapi import APIRouter, Depends
+from src.auth.user_manager import UserManager
+from src.dependencies import get_user_manager
+
+router = APIRouter()
+
+@router.get("/my-secure-endpoint")
+def secure_data(
+    user_manager: UserManager = Depends(get_user_manager)
+):
+    return {"message": "You are authenticated!", "user": "secure_user"}
+```
+
+### 3. Useful Documentation & Resources
+### SQLAlchemy
+This API Shell uses SQLAlchemy to create tables for database so I thought it fitting to include resources that I used and can recommend. 
+
+[Official SQLAlchemy website: Click here!](https://www.sqlalchemy.org/)
+
+[Arjancodes - SQLAlchemy: Click here!](https://www.youtube.com/watch?v=aAy-B6KPld8)
+
+### Pydantic
+
+This API Shell uses Pydantic to validate data from API endpoints.
+
+[Official Pydantic website: Click here!](https://docs.pydantic.dev/latest/)
+
+[Pixegami - Pydantic Tutorial: Click here!](https://www.youtube.com/watch?v=XIdQ6gO3Anc)
+
+
 
 # Installation Instructions
 
@@ -44,7 +100,7 @@ SQLAlchemy
 - Docker Desktop (Recommended)
 - Python 3.12 and local Redis instance (Local Development)
 
-**Tips:** Always easier creating a virtual enviroment to contain downloaded dependencies needed for this project if you will develop locally. [W3School Venv](https://www.w3schools.com/python/python_virtualenv.asp)
+**Tips:** Always easier creating a virtual environment to contain downloaded dependencies needed for this project if you will develop locally. [W3School Venv](https://www.w3schools.com/python/python_virtualenv.asp)
 
 ### Docker Compose (Fastest)
 ```bash
@@ -72,7 +128,27 @@ pip install -r requirements.txt
 # 4. Run the server
 uvicorn main:app --reload
 ```
+### Configuration
+Create a `.env` file in the root directory. You can copy the structure below:
 
+```ini
+# Security
+SECRET_KEY=your_super_secret_key_change_this
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+# Database
+DATABASE_HOSTNAME=localhost
+DATABASE_PORT=5432
+DATABASE_PASSWORD=postgres
+DATABASE_NAME=postgres
+DATABASE_USERNAME=postgres
+
+# Rate Limiting (Redis)
+RATE_LIMIT_LIMIT=5
+RATE_LIMIT_WINDOW=60
+
+```
 
 # Contributions
 

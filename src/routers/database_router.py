@@ -1,6 +1,7 @@
 from fastapi import Depends
 from fastapi import APIRouter
-from src.dependencies import get_db
+
+from src.core.database_dependencies import get_db
 
 # Create FastAPI router
 router = APIRouter()

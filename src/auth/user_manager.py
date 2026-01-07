@@ -1,6 +1,6 @@
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
-from src.config import settings
+from src.core.config import settings
 import jwt
 
 

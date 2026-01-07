@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter
 from typing import Annotated
 
-from src.config import settings
+from src.core.config import settings
 from src.auth.user_manager import UserManager
 
 # Create FastAPI router
