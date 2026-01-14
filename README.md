@@ -25,7 +25,7 @@ This shell provides the essential building blocksâ€”Security, Auth, and Storageâ
 
 # Author
 
-I'm Jonathan and I develop projects in my sparetime that help myself and others being better and more efficient developers!
+I'm Jonathan and I develop projects in my sparetime that help myself and others be better and more efficient developers!
 - [Linkedin](https://www.linkedin.com/in/jonathan-windell-418a55232/)
 - [Portfolio](https://portfolio.jonathans-labb.org/)
 
