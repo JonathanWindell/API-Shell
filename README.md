@@ -92,8 +92,8 @@ This API Shell leverages **SQLAlchemy** for robust database interactions and ORM
 # Installation Instructions
 
 ### Prerequisites
-- Docker Desktop (Recommended)
-- Python 3.12 and local Redis instance (Local Development)
+- **Docker Desktop** (Recommended)
+- **Python 3.12 and local Redis instance** (Local Development)
 
 **Tips:** Always easier creating a virtual environment to contain downloaded dependencies needed for this project if you will develop locally. [W3School Venv](https://www.w3schools.com/python/python_virtualenv.asp)
 
