@@ -73,7 +73,7 @@ jobs:
           python-version: "3.12" 
 
       - name: Install Quality Tools
-        run: pip install ruff safety
+        run: pip install ruff pip-audit
 
       - name: Linting with Ruff
         run: ruff check .
@@ -82,7 +82,7 @@ jobs:
         run: ruff format --check .
 
       - name: Security Check with Safety
-        run: safety scan -r requirements.txt
+        run: pip-audit -r requirements.txt
 
   coverage:
     name: Test coverage
