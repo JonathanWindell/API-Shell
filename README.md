@@ -11,6 +11,8 @@
 
 **CI/CD**
 
+[![Workflow push](https://github.com/JonathanWindell/API-Shell/actions/workflows/main.yaml/badge.svg)](https://github.com/JonathanWindell/API-Shell/actions/workflows/main.yaml)
+
 
 
 # Highlights
