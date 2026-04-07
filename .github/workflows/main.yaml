@@ -82,7 +82,7 @@ jobs:
         run: ruff format --check .
 
       - name: Security Check with Safety
-        run: safety check -r requirements.txt
+        run: safety scan -r requirements.txt
 
   coverage:
     name: Test coverage
